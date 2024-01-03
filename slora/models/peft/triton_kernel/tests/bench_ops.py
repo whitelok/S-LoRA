@@ -4,7 +4,7 @@ import itertools
 import torch
 
 import slora._kernels
-from slora.models.peft.triton_kernel.lora.lora_decode import lora_get_qkvo_fwd_expand, lora_get_qkvo_fwd_shrink
+from slora.models.peft.triton_kernel.lora.lora_prefill import lora_get_qkvo_fwd_expand, lora_get_qkvo_fwd_shrink
 
 from benchmark_utils import bench, gc_torch
 
@@ -596,10 +596,10 @@ def bench_ggemm_B_multi():
       arguments.sync()
       slora._kernels.dispatch_bgmv(
           t.y_ref, t.x_cat, t.w_T_all.view(-1, 32, weight_size//32), t.start_indicies, t.lora_ranks, t.cell_indicies, t.indicies, 0, t.scale)
-      lora_get_qkvo_fwd_expand(t.x_cat, t.w_T_all.view(-1, weight_size), t.y_test, t.scale, t.cell_indicies, 
-                               t.start_indicies, t.lora_ranks, t.b_start_loc, 
-                               t.request_bins, t.indicies_per_request, weight_size, 
-                               0, max(lora_random_req), max(t.request_bins))
+      # lora_get_qkvo_fwd_expand(t.x_cat, t.w_T_all.view(-1, weight_size), t.y_test, t.scale, t.cell_indicies, 
+      #                          t.start_indicies, t.lora_ranks, t.b_start_loc, 
+      #                          t.request_bins, t.indicies_per_request, weight_size, 
+      #                          0, max(lora_random_req), max(t.request_bins))
       print("max ", torch.max(torch.abs(t.y_test - t.y)))
       print("mean ", torch.mean(torch.abs(t.y_test - t.y)))
       print(t.y_test[0,:20])
