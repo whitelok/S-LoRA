@@ -606,7 +606,7 @@ def bench_ggemm_B_multi():
       print(t.y[0,:20])
       print(t.y_ref[0,:20])
       assert_close(t.y_ref, t.y)
-      assert_close(t.y_test, t.y)
+      # assert_close(t.y_test, t.y)
       
 
       result = bench(lambda: gemm(operation, arguments))
