@@ -594,6 +594,10 @@ def bench_ggemm_B_multi():
       # test correctness
       gemm(operation, arguments)
       arguments.sync()
+      
+      import ipdb
+      ipdb.set_trace()
+      
       slora._kernels.dispatch_bgmv(
           t.y_ref, t.x_cat, t.w_T_all.view(-1, 32, weight_size//32), t.start_indicies, t.lora_ranks, t.cell_indicies, t.indicies, 0, t.scale)
       # lora_get_qkvo_fwd_expand(t.x_cat, t.w_T_all.view(-1, weight_size), t.y_test, t.scale, t.cell_indicies, 
